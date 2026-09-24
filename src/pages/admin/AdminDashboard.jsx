@@ -97,7 +97,7 @@ const AdminDashboard = () => {
   const handleLogout = async () => {
     try {
       dispatch(logOutStart());
-      const res = await fetch(import.meta.env.VITE_API_URL + "/api/auth/logout");
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/auth/logout");
       const data = await res.json();
       if (!data?.success) return dispatch(logOutFailure(data?.message));
       dispatch(logOutSuccess());

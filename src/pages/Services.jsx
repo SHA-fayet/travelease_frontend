@@ -52,7 +52,7 @@ const Services = () => {
       const price = service.pricePerNight || service.price || service.pricePerDay;
       const serviceName = service.name || `${service.operatorName} - ${service.vehicleType}`;
 
-      const res = await fetch(import.meta.env.VITE_API_URL + "/api/booking/book-service", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/booking/book-service", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

@@ -42,7 +42,7 @@ const Booking = () => {
 
     try {
       setProcessingPayment(true);
-      const res = await fetch(import.meta.env.VITE_API_URL + "/api/payment/create-payment", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/payment/create-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

@@ -38,7 +38,7 @@ const ImageSearchModal = ({ isOpen, onClose }) => {
     formData.append("image", imageFile);
 
     try {
-      const res = await fetch(import.meta.env.VITE_API_URL + "/api/ai/analyze", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/ai/analyze", {
         method: "POST",
         body: formData,
       });

@@ -84,7 +84,7 @@ const Booking = () => {
 
     try {
       setProcessingPayment(true);
-      const res = await fetch(import.meta.env.VITE_API_URL + "/api/payment/create-payment", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/payment/create-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -117,7 +117,7 @@ const Booking = () => {
 
     try {
       setProcessingPayment(true);
-      const res = await fetch(import.meta.env.VITE_API_URL + "/api/payment/dummy-card-payment", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/payment/dummy-card-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: totalPrice, packageId, buyerId: currentUser._id, date, persons, cardNumber: rawCardNumber }),

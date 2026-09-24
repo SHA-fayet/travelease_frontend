@@ -29,9 +29,9 @@ const AdminPanel = () => {
     try {
       setLoading(true);
       const [bookingsRes, packagesRes, usersRes] = await Promise.all([
-        fetch(import.meta.env.VITE_API_URL + "/api/booking/get-all-bookings", { credentials: "include" }),
-        fetch(import.meta.env.VITE_API_URL + "/api/package/get-packages", { credentials: "include" }),
-        fetch(import.meta.env.VITE_API_URL + "/api/user/getAllUsers", { credentials: "include" }),
+        fetch((import.meta.env.VITE_API_URL || "") + "/api/booking/get-all-bookings", { credentials: "include" }),
+        fetch((import.meta.env.VITE_API_URL || "") + "/api/package/get-packages", { credentials: "include" }),
+        fetch((import.meta.env.VITE_API_URL || "") + "/api/user/getAllUsers", { credentials: "include" }),
       ]);
 
       const bookingsData = await bookingsRes.json();

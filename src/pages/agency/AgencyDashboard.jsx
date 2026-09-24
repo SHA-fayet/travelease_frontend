@@ -63,7 +63,7 @@ const AgencyDashboard = () => {
   const handleLogout = async () => {
     try {
       dispatch(logOutStart());
-      const res = await fetch(import.meta.env.VITE_API_URL + "/api/auth/logout", { credentials: "include" });
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/auth/logout", { credentials: "include" });
       const data = await res.json();
       if (!data?.success) return dispatch(logOutFailure(data?.message));
       dispatch(logOutSuccess());
