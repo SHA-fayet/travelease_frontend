@@ -1,0 +1,66 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+
+const AddGuide = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "", location: "", expertise: "", languages: "", pricePerDay: "", contactNumber: "", images: []
+  });
+
+  const handleChange = (e) => setFormData({ ...formData, [e.target.id]: e.target.value });
+  const handleFile = (e) => setFormData({ ...formData, images: Array.from(e.target.files) });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    Object.keys(formData).forEach(key => {
+      if (key !== "images") data.append(key, formData[key]);
+    });
+    formData.images.forEach(image => data.append("images", image));
+
+    try {
+      setLoading(true);
+      const res = await fetch(`/api/services/guide/create`, {
+        method: "POST", credentials: "include", body: data,
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.message);
+      
+      toast.success("Guide profile created!");
+      navigate(currentUser?.user_role === 2 ? "/agency-dashboard" : "/profile/admin");
+    } catch (err) {
+      toast.error(err.message || "Failed to add guide");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="mt-6 w-full min-h-screen flex items-center justify-center bg-[#EB662B] text-white rounded-lg py-10">
+      <div className="w-[95%] md:w-[80%] mx-auto flex flex-col gap-6 rounded-xl shadow-xl py-8 px-4">
+        <h1 className="text-center text-3xl font-bold text-white">Add <span className="">Local Guide</span></h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex gap-4">
+            <div className="flex-1 flex flex-col"><label>Guide Name:</label><input type="text" id="name" onChange={handleChange} className="p-2 border rounded bg-gray-200 text-gray-800 outline-none" required /></div>
+            <div className="flex-1 flex flex-col"><label>Service Location:</label><input type="text" id="location" onChange={handleChange} className="p-2 border rounded bg-gray-200 text-gray-800 outline-none" required /></div>
+          </div>
+          <div className="flex gap-4">
+            <div className="flex-1 flex flex-col"><label>Expertise:</label><input type="text" id="expertise" placeholder="e.g., Historical, Trekking" onChange={handleChange} className="p-2 border rounded bg-gray-200 text-gray-800 outline-none" required /></div>
+            <div className="flex-1 flex flex-col"><label>Languages (Comma separated):</label><input type="text" id="languages" placeholder="English, Bengali" onChange={handleChange} className="p-2 border rounded bg-gray-200 text-gray-800 outline-none" required /></div>
+          </div>
+          <div className="flex gap-4">
+            <div className="flex-1 flex flex-col"><label>Price Per Day (BDT):</label><input type="number" id="pricePerDay" onChange={handleChange} className="p-2 border rounded bg-gray-200 text-gray-800 outline-none" required /></div>
+            <div className="flex-1 flex flex-col"><label>Contact Number:</label><input type="text" id="contactNumber" onChange={handleChange} className="p-2 border rounded bg-gray-200 text-gray-800 outline-none" required /></div>
+          </div>
+          <div className="flex flex-col"><label>Upload Photo:</label><input type="file" accept="image/*" onChange={handleFile} className="p-2 bg-white text-black rounded" /></div>
+          <button type="submit" disabled={loading} className="p-3 rounded bg-black text-white font-bold hover:opacity-90 mt-2">{loading ? "Saving..." : "List Guide"}</button>
+        </form>
+      </div>
+    </div>
+  );
+};
+export default AddGuide;
