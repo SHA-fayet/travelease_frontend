@@ -35,10 +35,13 @@ const Package = () => {
   const [packageRatings, setPackageRatings] = useState([]);
   const [ratingGiven, setRatingGiven] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_API_URL || "";
+  const imageUrlBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
   const getPackageData = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/package/get-package-data/${params?.id}`);
+      const res = await fetch(`${apiUrl}/api/package/get-package-data/${params?.id}`);
       const data = await res.json();
       if (data?.success) {
         setPackageData(data.packageData);
@@ -55,7 +58,7 @@ const Package = () => {
 
   const getRatings = async () => {
     try {
-      const res = await fetch(`/api/rating/get-ratings/${params.id}/4`);
+      const res = await fetch(`${apiUrl}/api/rating/get-ratings/${params.id}/4`);
       const data = await res.json();
       if (data) {
         setPackageRatings(data);
@@ -69,7 +72,7 @@ const Package = () => {
 
   const checkRatingGiven = async () => {
     try {
-      const res = await fetch(`/api/rating/rating-given/${currentUser?._id}/${params?.id}`);
+      const res = await fetch(`${apiUrl}/api/rating/rating-given/${currentUser?._id}/${params?.id}`);
       const data = await res.json();
       setRatingGiven(data?.given);
     } catch (error) {
@@ -93,7 +96,7 @@ const Package = () => {
     }
     try {
       setLoading(true);
-      const res = await fetch("/api/rating/give-rating", {
+      const res = await fetch(`${apiUrl}/api/rating/give-rating`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(ratingsData),
@@ -147,10 +150,7 @@ const Package = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-8">
-      {/* Top Section: Details & Slider */}
       <div className="w-full flex flex-col md:flex-row items-start justify-between gap-10">
-        
-        {/* Left: Package Info */}
         <div className="w-full md:w-1/2 flex flex-col items-start gap-4">
           <h1 className="text-[#05073C] text-2xl md:text-4xl font-extrabold leading-tight">
             {packageData?.packageName}
@@ -197,7 +197,6 @@ const Package = () => {
           </div>
         </div>
 
-        {/* Right: Image Slider */}
         <div className="w-full md:w-1/2">
           {packageData?.packageImages?.length > 0 ? (
             <Swiper
@@ -210,7 +209,7 @@ const Package = () => {
               {packageData.packageImages.map((img, i) => (
                 <SwiperSlide key={i}>
                   <img
-                    src={img?.startsWith("http") ? img : `http://localhost:8000/images/${img}`}
+                    src={img?.startsWith("http") ? img : `${imageUrlBase}/images/${img}`}
                     alt={`${packageData?.packageName} - image ${i + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -225,7 +224,6 @@ const Package = () => {
         </div>
       </div>
 
-      {/* Middle Section: Description & Booking */}
       <div className="w-full flex flex-col md:flex-row items-start justify-between gap-10 py-12 mt-8 border-t">
         <div className="w-full md:w-[60%] flex flex-col items-start gap-4">
           <h2 className="text-gray-900 text-2xl font-bold">About This Trip</h2>
@@ -265,11 +263,9 @@ const Package = () => {
       
       <hr className="border-t border-gray-200 my-8" />
       
-      {/* Bottom Section: Reviews */}
       <div className="w-full flex flex-col items-center pb-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-8">Ratings & Reviews</h2>
         
-        {/* Review Form */}
         <div className={`w-full max-w-2xl bg-white p-6 rounded-xl shadow-sm border mb-10 ${(!currentUser || ratingGiven) ? "hidden" : "flex flex-col items-center"}`}>
           <h3 className="text-lg font-semibold mb-4">Leave a Review</h3>
           <Rating
@@ -295,7 +291,6 @@ const Package = () => {
           </button>
         </div>
 
-        {/* Reviews List */}
         {packageRatings && packageRatings.length > 0 ? (
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <RatingCard packageRatings={packageRatings} />

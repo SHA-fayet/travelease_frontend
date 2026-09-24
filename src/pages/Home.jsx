@@ -10,7 +10,7 @@ import Booking from "./components/Booking";
 import HeroImage from "./components/HeroImage";
 import Offers from "./components/Offers";
 import SingleCard from "./components/SingleCard";
-import AIPromoBanner from "./components/AIPromoBanner"; // <-- NEW AI BANNER IMPORT
+import AIPromoBanner from "./components/AIPromoBanner";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -26,14 +26,15 @@ const Home = () => {
 
   useEffect(() => {
     let cancelled = false;
+    const apiUrl = import.meta.env.VITE_API_URL || "";
 
     const loadHomepagePackages = async () => {
       setLoading(true);
       try {
         const [topData, latestData, offerData] = await Promise.all([
-          fetchJson("/api/package/get-packages?sort=packageRating&order=desc&limit=20"),
-          fetchJson("/api/package/get-packages?sort=createdAt&order=desc&limit=20"),
-          fetchJson("/api/package/get-packages?sort=createdAt&order=desc&offer=true&limit=20"),
+          fetchJson(`${apiUrl}/api/package/get-packages?sort=packageRating&order=desc&limit=20`),
+          fetchJson(`${apiUrl}/api/package/get-packages?sort=createdAt&order=desc&limit=20`),
+          fetchJson(`${apiUrl}/api/package/get-packages?sort=createdAt&order=desc&offer=true&limit=20`),
         ]);
 
         if (cancelled) return;
@@ -75,11 +76,9 @@ const Home = () => {
       <Top />
       <Booking />
 
-      {/* MASSIVE AI DISCOVERY CTA FOR DEFENSE DEMONSTRATION */}
       <AIPromoBanner />
 
       <div className="w-full flex flex-col my-10 px-4 md:px-8">
-        {/* Cleaned Search & Banner Section */}
         <div className="w-full bg-gradient-to-r from-slate-900 to-indigo-950 rounded-2xl p-8 md:p-12 text-white shadow-xl flex flex-col items-center text-center gap-6">
           <div className="max-w-2xl flex flex-col gap-2">
             <h2 className="text-3xl md:text-4xl font-extrabold text-yellow-400">
@@ -90,7 +89,6 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Search Bar Input & Button */}
           <div className="w-full max-w-xl flex items-center bg-white rounded-full p-1.5 shadow-lg">
             <input
               type="text"
@@ -111,7 +109,6 @@ const Home = () => {
             </button>
           </div>
 
-          {/* Quick Filter Buttons */}
           <div className="w-full max-w-2xl flex flex-wrap justify-center gap-2 mt-2">
             <button
               type="button"
@@ -144,7 +141,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Package Sections */}
         <div className="main py-10 flex flex-col gap-10">
           {loading && <h2 className="text-center text-xl py-6">Loading Bangladesh packages...</h2>}
 
