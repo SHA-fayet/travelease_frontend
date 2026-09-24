@@ -8,7 +8,7 @@ export default function PrivateRoute() {
   const [ok, setOk] = useState(false);
 
   const authCheck = async () => {
-    const res = await fetch("/api/user/user-auth", {
+    const res = await fetch(import.meta.env.VITE_API_URL + "/api/user/user-auth", {
       method: "GET",
       headers: {
         Accept: "application/json",

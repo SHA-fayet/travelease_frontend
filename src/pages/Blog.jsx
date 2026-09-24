@@ -79,7 +79,7 @@ const Blog = () => {
     if (imageFile) formData.append("image", imageFile);
 
     try {
-      const res = await fetch("/api/community/posts/create", {
+      const res = await fetch(import.meta.env.VITE_API_URL + "/api/community/posts/create", {
         method: "POST",
         credentials: "include",
         body: formData,

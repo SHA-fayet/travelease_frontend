@@ -55,7 +55,7 @@ const HeroImage = () => {
     const scan52DatasetClasses = async () => {
       try {
         // Fetch packages covering the 52 dataset classes and districts
-        const res = await fetch("/api/package/get-packages?limit=100");
+        const res = await fetch(import.meta.env.VITE_API_URL + "/api/package/get-packages?limit=100");
         const data = await res.json();
 
         if (data?.success && data?.packages?.length > 0 && !cancelled) {

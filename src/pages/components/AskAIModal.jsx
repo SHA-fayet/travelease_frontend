@@ -30,7 +30,7 @@ const AskAIModal = ({ isOpen, onClose, defaultPrompt }) => {
     setReply("");
 
     try {
-      const res = await fetch("/api/chatbot/ask", {
+      const res = await fetch(import.meta.env.VITE_API_URL + "/api/chatbot/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: query }),
