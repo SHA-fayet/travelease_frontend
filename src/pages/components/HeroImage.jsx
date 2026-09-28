@@ -75,7 +75,7 @@ const HeroImage = () => {
               .toLowerCase();
 
             for (const imgName of pkg.packageImages) {
-              const imageUrl = imgName?.startsWith("http")
+              const imageUrl = imgName.startsWith("http")
                 ? imgName
                 : `https://travelease-backend-mwq0.onrender.com/images/${imgName}`;
 

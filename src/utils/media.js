@@ -30,7 +30,7 @@ export const getMediaUrl = (value, path = "/images/") => {
     return trimmed;
   }
 
-  if (trimmed?.startsWith("/")) {
+  if (trimmed.startsWith("/")) {
     return `${API_BASE_URL}${trimmed}`;
   }
 
@@ -148,7 +148,7 @@ export const fetchJson = async (url, options = {}) => {
     return null;
   }
 
-  const fullUrl = url?.startsWith("/api") ? `${API_BASE_URL}${url}` : url;
+  const fullUrl = url.startsWith("/api") ? `${API_BASE_URL}${url}` : url;
   const response = await fetch(fullUrl, options);
 
   const text = await response.text();
