@@ -18,7 +18,7 @@ const REMOTE_FALLBACK_IMAGES = [
 
 const getAvatarUrl = (avatarPath) => {
   if (!avatarPath) return "https://via.placeholder.com/150";
-  return avatarPath.startsWith("http") ? avatarPath : `https://travelease-backend-mwq0.onrender.com/images/${avatarPath}`;
+  return avatarPath?.startsWith("http") ? avatarPath : `https://travelease-backend-mwq0.onrender.com/images/${avatarPath}`;
 };
 
 const categoryClass = (category) => {

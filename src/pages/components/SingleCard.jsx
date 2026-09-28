@@ -51,7 +51,7 @@ const SingleCard = ({ packageData }) => {
       >
       <img 
         src={
-          packageData?.packageImages[0]?.startsWith("http") 
+          packageData?.packageImages[0]??.startsWith("http") 
             ? packageData.packageImages[0] 
             : `https://travelease-backend-mwq0.onrender.com/images/${packageData.packageImages[0]}`
         } 

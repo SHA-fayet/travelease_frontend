@@ -6,7 +6,7 @@ import defaultProfileImg from "../../assets/images/profile.png";
 const getAvatarUrl = (avatarPath) => {
   if (!avatarPath) return defaultProfileImg;
   const timestamp = new Date().getTime(); 
-  if (avatarPath.startsWith("http")) return `${avatarPath}?t=${timestamp}`;
+  if (avatarPath?.startsWith("http")) return `${avatarPath}?t=${timestamp}`;
   return `https://travelease-backend-mwq0.onrender.com/images/${avatarPath}?t=${timestamp}`;
 };
 

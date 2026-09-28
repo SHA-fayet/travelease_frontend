@@ -10,7 +10,7 @@ import { FiUpload } from "react-icons/fi";
 const getAvatarUrl = (avatarPath) => {
   if (!avatarPath) return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
   const timestamp = new Date().getTime(); 
-  if (avatarPath.startsWith("http")) return `${avatarPath}?t=${timestamp}`;
+  if (avatarPath?.startsWith("http")) return `${avatarPath}?t=${timestamp}`;
   return `https://travelease-backend-mwq0.onrender.com/images/${avatarPath}?t=${timestamp}`;
 };
 
@@ -39,7 +39,7 @@ const UpdateProfile = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!file.type.startsWith("image/")) return toast.error("Please choose an image file");
+    if (!file.type?.startsWith("image/")) return toast.error("Please choose an image file");
     
     setAvatarFile(file);
     const reader = new FileReader();
