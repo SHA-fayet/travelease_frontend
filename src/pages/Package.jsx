@@ -36,6 +36,13 @@ const Package = () => {
   const [ratingGiven, setRatingGiven] = useState(false);
 
   const getPackageData = async () => {
+    // CRITICAL FIX: Prevent the component from fetching literal "undefined" strings
+    if (!params?.id || params.id === "undefined" || params.id === "null") {
+      setError("Invalid Package ID");
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const res = await fetch(`/api/package/get-package-data/${params?.id}`);
@@ -54,6 +61,7 @@ const Package = () => {
   };
 
   const getRatings = async () => {
+    if (!params?.id || params.id === "undefined") return;
     try {
       const res = await fetch(`/api/rating/get-ratings/${params.id}/4`);
       const data = await res.json();
@@ -68,6 +76,7 @@ const Package = () => {
   };
 
   const checkRatingGiven = async () => {
+    if (!params?.id || params.id === "undefined") return;
     try {
       const res = await fetch(`/api/rating/rating-given/${currentUser?._id}/${params?.id}`);
       const data = await res.json();
@@ -117,10 +126,15 @@ const Package = () => {
   };
 
   useEffect(() => {
-    if (params.id) {
+    // CRITICAL FIX: Ensure valid ID before attempting data fetches
+    if (params.id && params.id !== "undefined" && params.id !== "null") {
       getPackageData();
       getRatings();
+    } else {
+      setLoading(false);
+      setError("Package not found");
     }
+    
     if (currentUser) {
       checkRatingGiven();
     }
