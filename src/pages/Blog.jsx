@@ -18,7 +18,7 @@ const REMOTE_FALLBACK_IMAGES = [
 
 const getAvatarUrl = (avatarPath) => {
   if (!avatarPath) return "https://via.placeholder.com/150";
-  return avatarPath.startsWith("http") ? avatarPath : `http://localhost:8000/images/${avatarPath}`;
+  return avatarPath.startsWith("http") ? avatarPath : `https://travelease-backend-mwq0.onrender.com/images/${avatarPath}`;
 };
 
 const categoryClass = (category) => {
@@ -255,7 +255,7 @@ const Blog = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
               {posts.map((post, index) => {
                 const isLiked = post.likes.includes(currentUser?._id);
-                const displayImage = post.image ? `http://localhost:8000/images/${post.image}` : REMOTE_FALLBACK_IMAGES[index % REMOTE_FALLBACK_IMAGES.length];
+                const displayImage = post.image ? `https://travelease-backend-mwq0.onrender.com/images/${post.image}` : REMOTE_FALLBACK_IMAGES[index % REMOTE_FALLBACK_IMAGES.length];
                 
                 return (
                   <motion.article

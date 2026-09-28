@@ -210,7 +210,7 @@ const Package = () => {
               {packageData.packageImages.map((img, i) => (
                 <SwiperSlide key={i}>
                   <img
-                    src={img?.startsWith("http") ? img : `http://localhost:8000/images/${img}`}
+                    src={img?.startsWith("http") ? img : `https://travelease-backend-mwq0.onrender.com/images/${img}`}
                     alt={`${packageData?.packageName} - image ${i + 1}`}
                     className="w-full h-full object-cover"
                   />

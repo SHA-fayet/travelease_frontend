@@ -9,7 +9,7 @@ import autoTable from "jspdf-autotable";
 const getImgUrl = (pkg) => {
   const images = pkg?.packageImages || pkg?.images;
   if (!images || !Array.isArray(images) || images.length === 0) return "https://via.placeholder.com/150?text=Service";
-  return images[0].startsWith("http") ? images[0] : `http://localhost:8000/images/${images[0]}`;
+  return images[0].startsWith("http") ? images[0] : `https://travelease-backend-mwq0.onrender.com/images/${images[0]}`;
 };
 
 const MyBookings = () => {

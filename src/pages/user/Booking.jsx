@@ -142,7 +142,7 @@ const Booking = () => {
   // Safely extract the image preventing undefined crashes
   const images = packageData?.packageImages || packageData?.images;
   const imageUrl = images && images.length > 0 
-    ? (images[0].startsWith("http") ? images[0] : `http://localhost:8000/images/${images[0]}`) 
+    ? (images[0].startsWith("http") ? images[0] : `https://travelease-backend-mwq0.onrender.com/images/${images[0]}`) 
     : "https://via.placeholder.com/150?text=No+Image";
 
   return (

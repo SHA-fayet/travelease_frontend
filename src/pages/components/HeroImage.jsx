@@ -77,7 +77,7 @@ const HeroImage = () => {
             for (const imgName of pkg.packageImages) {
               const imageUrl = imgName.startsWith("http")
                 ? imgName
-                : `http://localhost:8000/images/${imgName}`;
+                : `https://travelease-backend-mwq0.onrender.com/images/${imgName}`;
 
               const dims = await getImageDimensions(imageUrl);
 

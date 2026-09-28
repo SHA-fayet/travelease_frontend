@@ -43,7 +43,7 @@ const StripePayment = () => {
     const formatCVC = card.cvc.trim();
 
     try {
-      const res = await fetch(`http://localhost:8000/payment/create-payment`, {
+      const res = await fetch(`https://travelease-backend-mwq0.onrender.com/payment/create-payment`, {
         method: "POST",
         body: JSON.stringify({
           amount: "1000",

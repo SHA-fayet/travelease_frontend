@@ -171,7 +171,7 @@ const ImageSearchModal = ({ isOpen, onClose }) => {
                         className="bg-white border p-3 rounded-xl flex gap-3 hover:shadow-md transition group"
                       >
                         <img 
-                          src={pkg.packageImages?.[0] ? `http://localhost:8000/images/${pkg.packageImages[0]}` : "https://via.placeholder.com/150"} 
+                          src={pkg.packageImages?.[0] ? `https://travelease-backend-mwq0.onrender.com/images/${pkg.packageImages[0]}` : "https://via.placeholder.com/150"} 
                           alt={pkg.packageName} 
                           className="w-16 h-16 object-cover rounded-lg" 
                         />
@@ -206,7 +206,7 @@ const ImageSearchModal = ({ isOpen, onClose }) => {
                         className="bg-white border p-3 rounded-xl flex gap-3 hover:shadow-md transition group"
                       >
                         <img 
-                          src={hotel.images?.[0]?.startsWith("http") ? hotel.images[0] : `http://localhost:8000/images/${hotel.images?.[0]}`} 
+                          src={hotel.images?.[0]?.startsWith("http") ? hotel.images[0] : `https://travelease-backend-mwq0.onrender.com/images/${hotel.images?.[0]}`} 
                           alt={hotel.name} 
                           className="w-16 h-16 object-cover rounded-lg" 
                         />

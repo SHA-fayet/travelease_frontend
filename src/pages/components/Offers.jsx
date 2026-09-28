@@ -12,7 +12,7 @@ const Offers = ({ packageData }) => {
           src={
             packageData?.packageImages[0]?.startsWith("http") 
               ? packageData.packageImages[0] 
-              : `http://localhost:8000/images/${packageData.packageImages[0]}`
+              : `https://travelease-backend-mwq0.onrender.com/images/${packageData.packageImages[0]}`
           } 
           alt="Package Image" 
           // Keep your existing className here

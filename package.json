@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "http://localhost:8000",
+  "proxy": "https://travelease-backend-mwq0.onrender.com",
   "scripts": {
     "start": "vite --port 5174 --open",
     "dev": "vite",

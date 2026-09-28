@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const getImageUrl = (imagePath) => {
   if (!imagePath) return "https://via.placeholder.com/150?text=Service";
-  return imagePath.startsWith("http") ? imagePath : `http://localhost:8000/images/${imagePath}`;
+  return imagePath.startsWith("http") ? imagePath : `https://travelease-backend-mwq0.onrender.com/images/${imagePath}`;
 };
 
 const MyHistory = () => {

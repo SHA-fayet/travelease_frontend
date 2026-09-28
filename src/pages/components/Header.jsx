@@ -7,7 +7,7 @@ const getAvatarUrl = (avatarPath) => {
   if (!avatarPath) return defaultProfileImg;
   const timestamp = new Date().getTime(); 
   if (avatarPath.startsWith("http")) return `${avatarPath}?t=${timestamp}`;
-  return `http://localhost:8000/images/${avatarPath}?t=${timestamp}`;
+  return `https://travelease-backend-mwq0.onrender.com/images/${avatarPath}?t=${timestamp}`;
 };
 
 const Header = () => {

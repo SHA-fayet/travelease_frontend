@@ -136,7 +136,7 @@ const Services = () => {
             <div key={service._id} className="bg-white rounded-2xl shadow-sm border overflow-hidden flex flex-col hover:shadow-md transition">
               <div className="h-48 bg-gray-200 overflow-hidden">
                 <img 
-                  src={service.images?.[0] ? (service.images[0].startsWith('http') ? service.images[0] : `http://localhost:8000/images/${service.images[0]}`) : "https://via.placeholder.com/400x300?text=No+Image"} 
+                  src={service.images?.[0] ? (service.images[0].startsWith('http') ? service.images[0] : `https://travelease-backend-mwq0.onrender.com/images/${service.images[0]}`) : "https://via.placeholder.com/400x300?text=No+Image"} 
                   alt={service.name || service.operatorName} 
                   className="w-full h-full object-cover"
                 />

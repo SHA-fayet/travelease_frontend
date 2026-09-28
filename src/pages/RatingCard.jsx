@@ -17,7 +17,7 @@ const RatingCard = ({ packageRatings }) => {
               <div className="flex gap-2 items-center">
                 <img
                   src={
-                    `http://localhost:8000/images/${rating.userProfileImg}` ||
+                    `https://travelease-backend-mwq0.onrender.com/images/${rating.userProfileImg}` ||
                     defaultProfileImg
                   }
                   alt={rating.username[0]}
