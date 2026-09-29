@@ -26,6 +26,7 @@ const Booking = () => {
   const [card, setCard] = useState({ number: "", name: "", expiry: "", cvv: "" });
 
   useEffect(() => {
+    // 100% PREVENTS THE /undefined 400 ERROR
     if (!packageId || packageId === "undefined") {
       setLoading(false);
       return;
@@ -75,7 +76,6 @@ const Booking = () => {
     
     try {
       setProcessingPayment(true);
-      // NOTE: Make sure "/api/payment/card" matches the exact name of your backend route!
       const res = await fetch("/api/payment/card", {
         method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include",
         body: JSON.stringify({ 
@@ -93,7 +93,9 @@ const Booking = () => {
         }),
       });
       const data = await res.json();
-      if (data?.success) {
+      if (data?.success && data?.url) {
+        window.location.href = data.url;
+      } else if (data?.success) {
         toast.success("Payment Successful!");
         navigate("/profile/user");
       } else { 
@@ -110,7 +112,7 @@ const Booking = () => {
       setProcessingPayment(true);
       const res = await fetch("/api/payment/create-payment", {
         method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include",
-        // STRICT bKash DECIMAL FORMATTING
+        // STRICT bKash DECIMAL FORMATTING REQUIRED
         body: JSON.stringify({ amount: totalPrice.toFixed(2), packageId, buyerId: currentUser._id, date, persons: Number(persons) }),
       });
       const data = await res.json();
@@ -119,6 +121,7 @@ const Booking = () => {
     } catch (error) { toast.error("Payment connection failed."); setProcessingPayment(false); }
   };
 
+  // Safe Cloudinary object extractor
   let imgRef = Array.isArray(packageData?.packageImages) ? packageData.packageImages[0] : packageData?.packageImages;
   if (imgRef && typeof imgRef === 'object' && imgRef.url) imgRef = imgRef.url;
   const imageUrl = getImageUrl(imgRef) || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80";
