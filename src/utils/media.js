@@ -17,3 +17,24 @@ export const getImageUrl = (data) => {
 
   return path.startsWith("http") ? path : `https://travelease-backend-mwq0.onrender.com/images/${path}`;
 };
+
+// Added back missing helper functions to satisfy Top.jsx imports
+export const fetchJson = async (url) => {
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch JSON error:", error);
+    return null;
+  }
+};
+
+export const filterBangladeshPackages = (packages) => {
+  if (!Array.isArray(packages)) return [];
+  return packages;
+};
+
+export const getFirstHighResImage = (pkg) => {
+  return getImageUrl(pkg);
+};
