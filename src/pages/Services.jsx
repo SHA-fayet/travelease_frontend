@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { FaHotel, FaBus, FaMapMarkedAlt, FaTimes, FaCalendarAlt, FaUsers, FaCreditCard } from "react-icons/fa";
+// FIXED: Added FaMapMarkerAlt to the import list so the page stops crashing
+import { FaHotel, FaBus, FaMapMarkedAlt, FaMapMarkerAlt, FaTimes, FaCalendarAlt, FaUsers, FaCreditCard } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getImageUrl } from "../utils/media";
@@ -48,19 +49,20 @@ const Services = () => {
     if (!date) return toast.error("Please select a date");
     try {
       setProcessingPayment(true);
-      const res = await fetch("/api/payment/stripe", {
+      const res = await fetch("/api/payment/card", {
         method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include",
         body: JSON.stringify({ 
           amount: getPrice(checkoutService) * Number(persons), 
           serviceId: checkoutService._id,
-          packageId: checkoutService._id, // Fallback for backend compatibility
+          packageId: checkoutService._id, 
           itemType: activeTab.charAt(0).toUpperCase() + activeTab.slice(1),
           buyerId: currentUser._id, date, persons: Number(persons) 
         }),
       });
       const data = await res.json();
       if (data?.success && data?.url) window.location.href = data.url; 
-      else { toast.error(data?.message || "Failed to initialize Card gateway"); setProcessingPayment(false); }
+      else if (data?.success) { toast.success("Payment Successful!"); setCheckoutService(null); navigate("/profile/user"); }
+      else { toast.error(data?.message || "Failed to process card"); setProcessingPayment(false); }
     } catch (error) { toast.error("Payment connection failed."); setProcessingPayment(false); }
   };
 
@@ -73,7 +75,7 @@ const Services = () => {
       const res = await fetch("/api/payment/create-payment", {
         method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include",
         body: JSON.stringify({ 
-          amount: totalAmount.toFixed(2), // Strict bKash formatting
+          amount: totalAmount.toFixed(2), 
           serviceId: checkoutService._id, packageId: checkoutService._id,
           itemType: activeTab.charAt(0).toUpperCase() + activeTab.slice(1),
           buyerId: currentUser._id, date, persons: Number(persons) 
@@ -119,7 +121,6 @@ const Services = () => {
         </div>
       )}
 
-      {/* CHECKOUT MODAL */}
       {checkoutService && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative flex flex-col max-h-[90vh]">
