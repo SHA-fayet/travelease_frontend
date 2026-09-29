@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 
+// CRASH PROOF PARSER FOR UPDATE PAGE (Using reliable Unsplash instead of placeholder.com)
 const getImgUrl = (image) => {
   if (image instanceof File) return URL.createObjectURL(image);
   let path = image;
   if (path && typeof path === 'object' && path.url) path = path.url;
-  if (!path || typeof path !== "string" || path === "null") return "https://via.placeholder.com/150?text=No+Image";
+  if (!path || typeof path !== "string" || path === "null") return "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80";
   return path.startsWith("http") ? path : `https://travelease-backend-mwq0.onrender.com/images/${path}`;
 };
 
@@ -62,7 +63,6 @@ const UpdatePackage = () => {
       });
       formData.packageImages.forEach((image) => { form.append("packageImages", image); });
 
-      // FIXED: Added credentials: "include" so auth cookies are sent to backend
       const res = await fetch(`/api/package/update-package/${params?.id}`, { 
         method: "POST", 
         credentials: "include",
