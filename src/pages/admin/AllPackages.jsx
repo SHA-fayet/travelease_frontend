@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const getImgUrl = (images) => {
-  if (!images || images.length === 0) return "https://via.placeholder.com/150";
-  return images[0].startsWith("http") ? images[0] : `https://travelease-backend-mwq0.onrender.com/images/${images[0]}`;
+// CRASH PROOF PARSER
+const getImgUrl = (data) => {
+  let path = data?.packageImages || data?.images || data;
+  if (Array.isArray(path)) path = path[0];
+  if (path && typeof path === 'object' && path.url) path = path.url;
+  if (!path || typeof path !== "string" || path === "null") return "https://via.placeholder.com/150?text=No+Image";
+  return path.startsWith("http") ? path : `https://travelease-backend-mwq0.onrender.com/images/${path}`;
 };
 
 const AllPackages = () => {
@@ -51,21 +55,15 @@ const AllPackages = () => {
   return (
     <div className="w-full flex flex-col gap-6">
       <input className="w-full border-2 border-gray-200 rounded-lg p-3 outline-none focus:border-[#EB662B]" type="text" placeholder="Search Packages..." value={search} onChange={(e) => setSearch(e.target.value)} />
-      
       <div className="flex gap-2 border-b pb-4">
         {["all", "offer", "latest", "top"].map((f) => (
-          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-full font-bold capitalize transition ${filter === f ? "bg-[#EB662B] text-white" : "bg-white border text-gray-600 hover:bg-gray-100"}`}>
-            {f}
-          </button>
+          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-full font-bold capitalize transition ${filter === f ? "bg-[#EB662B] text-white" : "bg-white border text-gray-600 hover:bg-gray-100"}`}>{f}</button>
         ))}
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {packages.map((pack) => (
           <div key={pack._id} className="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col">
-            <Link to={`/package/${pack._id}`}>
-              <img src={getImgUrl(pack.packageImages)} alt="Package" className="w-full h-48 object-cover hover:scale-105 transition duration-300" />
-            </Link>
+            <Link to={`/package/${pack._id}`}><img src={getImgUrl(pack.packageImages)} alt="Package" className="w-full h-48 object-cover hover:scale-105 transition duration-300" /></Link>
             <div className="p-4 flex flex-col gap-2">
               <Link to={`/package/${pack._id}`}><h3 className="font-bold text-lg text-gray-900 hover:text-[#EB662B]">{pack.packageName}</h3></Link>
               <p className="text-gray-500 text-sm">📍 {pack.packageDestination}</p>
