@@ -5,13 +5,19 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import AskAIModal from "./AskAIModal";
 import axios from "axios";
-import { getImageUrl } from "../../utils/media";
+
+// Embedded Safe Image Parser
+const getSafeImg = (imgRef) => {
+  let path = Array.isArray(imgRef) ? imgRef[0] : imgRef;
+  if (path && typeof path === 'object' && path.url) path = path.url;
+  if (!path || typeof path !== "string" || path === "null") return "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80";
+  return path.startsWith("http") ? path : `https://travelease-backend-mwq0.onrender.com/images/${path}`;
+};
 
 const SingleCard = ({ packageData }) => {
   const [showModal, setShowModal] = useState(false);
   const [aiReply, setAIReply] = useState("");
   const [loading, setLoading] = useState(false);
-  const [defaultPrompt, setDefaultPrompt] = useState("");
 
   const handleAsk = async (question) => {
     setLoading(true);
@@ -24,17 +30,10 @@ const SingleCard = ({ packageData }) => {
     } catch (error) { setAIReply("Something went wrong!"); } finally { setLoading(false); }
   };
 
-  let imgRef = Array.isArray(packageData?.packageImages) ? packageData.packageImages[0] : packageData?.packageImages;
-  if (imgRef && typeof imgRef === 'object' && imgRef.url) imgRef = imgRef.url;
-  const imgSrc = getImageUrl(imgRef) || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80";
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-[260px] h-[360px] mx-auto flex flex-col border rounded-lg overflow-hidden shadow-md bg-white transition-transform duration-300 hover:scale-105"
-    >
+    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.6, ease: "easeOut" }} className="w-[260px] h-[360px] mx-auto flex flex-col border rounded-lg overflow-hidden shadow-md bg-white transition-transform duration-300 hover:scale-105">
       <Link to={`/package/${packageData?._id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="w-full h-40 bg-gray-100 overflow-hidden">
-        <img src={imgSrc} alt={packageData?.packageName || "Package"} className="w-full h-full object-cover" />
+        <img src={getSafeImg(packageData?.packageImages)} alt={packageData?.packageName || "Package"} className="w-full h-full object-cover" />
       </Link>
 
       <div className="p-3 flex flex-col items-start gap-1 flex-1">
@@ -70,8 +69,8 @@ const SingleCard = ({ packageData }) => {
         )}
       </div>
 
-      <button className="px-6 py-1 bg-[#EB662B] text-white font-medium text-sm" onClick={() => { setShowModal(true); setDefaultPrompt(`Tell me about travel tips and places to visit in ${packageData?.packageDestination}`); }}>Ask AI</button>
-      <AskAIModal isOpen={showModal} onClose={() => setShowModal(false)} onAsk={handleAsk} reply={aiReply} loading={loading} defaultPrompt={defaultPrompt} />
+      <button className="px-6 py-1 bg-[#EB662B] text-white font-medium text-sm" onClick={() => setShowModal(true)}>Ask AI</button>
+      <AskAIModal isOpen={showModal} onClose={() => setShowModal(false)} onAsk={handleAsk} reply={aiReply} loading={loading} defaultPrompt={`Tell me about ${packageData?.packageDestination}`} />
     </motion.div>
   );
 };
