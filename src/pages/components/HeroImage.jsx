@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 
 // 1. Stunning Default Fallback Images
 const defaultSlides = [
-  { id: "d1", title: "Explore Cox's Bazar", location: "COX'S BAZAR", image: "https://th.bing.com/th/id/R.0717198bc54a06cfad0ea0b5d778db6e?rik=50HUv3EmdxU76A&pid=ImgRaw&r=0" },
+  { id: "d1", title: "Explore Cox's Bazar", location: "COX'S BAZAR", image: "https://cdn.pixabay.com/photo/2018/03/20/14/00/sea-3243357_1280.jpg" },
   { id: "d2", title: "Discover Sylhet", location: "SYLHET", image: "https://tse2.mm.bing.net/th/id/OIP.n8wSf9WGDCks9U4guCZCsAHaD4?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },
   { id: "d3", title: "Journey to Bandarban", location: "BANDARBAN", image: "https://media-cdn.tripadvisor.com/media/photo-c/1280x250/0d/77/22/14/amiakhum.jpg" },
   { id: "d4", title: "Experience Sajek Valley", location: "RANGAMATI", image: "https://th.bing.com/th/id/R.b631993654601ca6cd2a635b5a7c3369?rik=cU%2fzh5GkDUH53Q&riu=http%3a%2f%2f4.bp.blogspot.com%2f-jHJjkqqR_Fo%2fVpNHJV0YQbI%2fAAAAAAAAAII%2fv8GDqLnjIM4%2fs1600%2fRangamati.jpg&ehk=fP%2bi00MpD2RoNdEFd1pJRNgoRJyd%2fu%2b8l11W5psIDFk%3d&risl=&pid=ImgRaw&r=0" },
