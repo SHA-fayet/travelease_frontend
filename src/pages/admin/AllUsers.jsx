@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -23,25 +22,19 @@ const AllUsers = () => {
         setAllUsers(data);
         setError(false);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) { console.log(error); }
   };
+
   useEffect(() => {
     getUsers();
-    if (search) getUsers();
   }, [search]);
 
   const handleUserDelete = async (userId) => {
-    const CONFIRM = confirm(
-      "Are you sure ? the account will be permenantly deleted!"
-    );
+    const CONFIRM = window.confirm("Are you sure? the account will be permanently deleted!");
     if (CONFIRM) {
       setLoading(true);
       try {
-        const res = await fetch(`/api/user/delete-user/${userId}`, {
-          method: "DELETE",
-        });
+        const res = await fetch(`/api/user/delete-user/${userId}`, { method: "DELETE" });
         const data = await res.json();
         if (data?.success === false) {
           setLoading(false);
@@ -51,70 +44,56 @@ const AllUsers = () => {
         setLoading(false);
         toast.success(data?.message);
         getUsers();
-      } catch (error) {}
+      } catch (error) { console.error(error); }
     }
   };
 
   return (
-    <>
-      <div className="w-full flex justify-center">
-        <div className="w-full shadow-lg rounded-lg p-2">
-          <h1 className="text-2xl text-center">
-            {loading ? "Loading..." : "All Users"}
-          </h1>
-          {error && <h1 className="text-center text-2xl">{error}</h1>}
-          <div>
-            <input
-              type="text"
-              className="my-3 p-2 rounded-lg border"
-              placeholder="Search name,email or phone..."
-              onChange={(e) => {
-                setSearch(e.target.value);
-              }}
-            />
-            <h2 className="text-xl font-semibold mb-2 ml-2">
-              Total Users: {allUser.length ? allUser?.length : "Loading..."}
-            </h2>
-          </div>
-          {allUser ? (
-            allUser.map((user, i) => {
-              return (
-                <div
-                  className="flex overflow-auto justify-between p-2 px-3 border-y-2 gap-3"
-                  key={i}
-                >
-                  <h5 className="flex flex-1 justify-center items-center text-ellipsis p-[5px]">
-                    {user.username}
-                  </h5>
-                  <h5 className="flex flex-1 justify-center items-center text-ellipsis p-[5px]">
-                    {user.email}
-                  </h5>
-                  <h5 className="flex flex-1 justify-center items-center text-ellipsis p-[5px]">
-                    {user.address}
-                  </h5>
-                  <h5 className="flex flex-1 justify-center items-center text-ellipsis p-[5px]">
-                    {user.phone}
-                  </h5>
-                  <div className="flex flex-col flex-1 justify-center items-center p-[5px]">
-                    <button
-                      disabled={loading}
-                      className="p-2 text-red-500 hover:cursor-pointer hover:scale-125 disabled:opacity-80"
-                      onClick={() => {
-                        handleUserDelete(user._id);
-                      }}
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <></>
-          )}
+    <div className="w-full flex flex-col gap-6">
+      <input className="w-full border-2 border-gray-200 rounded-lg p-3 outline-none focus:border-[#EB662B]" type="text" placeholder="Search Users by name, email or phone..." value={search} onChange={(e) => setSearch(e.target.value)} />
+      
+      <div className="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col">
+        <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+          <h2 className="font-bold text-gray-800 text-lg">Total Users: {allUser.length}</h2>
+          {error && <p className="text-red-500 font-bold">{error}</p>}
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[800px]">
+            <thead>
+              <tr className="bg-gray-100 text-gray-600 text-xs uppercase tracking-wider">
+                <th className="p-4">Username</th>
+                <th className="p-4">Email</th>
+                <th className="p-4">Address</th>
+                <th className="p-4">Phone</th>
+                <th className="p-4 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y text-sm">
+              {loading ? (
+                <tr><td colSpan="5" className="p-6 text-center text-gray-500 font-bold">Loading Users...</td></tr>
+              ) : allUser.length === 0 ? (
+                <tr><td colSpan="5" className="p-6 text-center text-gray-500 font-bold">No users found.</td></tr>
+              ) : (
+                allUser.map((user, i) => (
+                  <tr key={user._id || i} className="hover:bg-gray-50 transition">
+                    <td className="p-4 font-bold text-gray-800">{user.username}</td>
+                    <td className="p-4 text-gray-600">{user.email}</td>
+                    <td className="p-4 text-gray-600">{user.address || "N/A"}</td>
+                    <td className="p-4 text-gray-600">{user.phone || "N/A"}</td>
+                    <td className="p-4 text-center">
+                      <button disabled={loading} className="p-2 text-red-500 hover:text-red-700 transition hover:scale-110 disabled:opacity-50" onClick={() => handleUserDelete(user._id)}>
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
