@@ -5,15 +5,7 @@ import { toast } from "react-toastify";
 import { FaBell, FaTimes, FaInfoCircle, FaCheckDouble, FaFilePdf } from "react-icons/fa";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-
-const getImgUrl = (pkg) => {
-  const images = pkg?.packageImages || pkg?.images;
-  const firstImg = images?.[0];
-  if (!firstImg || typeof firstImg !== "string" || firstImg === "null") {
-    return "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80";
-  }
-  return firstImg.startsWith("http") ? firstImg : `https://travelease-backend-mwq0.onrender.com/images/${firstImg}`;
-};
+import { getImageUrl } from "../../utils/media";
 
 const MyBookings = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -193,7 +185,7 @@ const MyBookings = () => {
                 return (
                   <tr key={booking._id} className="transition hover:bg-gray-50">
                     <td className="p-4 flex items-center gap-3">
-                      <img className="w-12 h-12 rounded-lg object-cover border" src={getImgUrl(pkg)} alt="img" />
+                      <img className="w-12 h-12 rounded-lg object-cover border" src={getImageUrl(pkg)} alt="img" />
                       <span className="font-bold text-gray-800 line-clamp-2">{itemName}</span>
                     </td>
                     <td className="p-4 font-bold text-[#6358DC]">{new Date(booking?.date || booking?.travelDate).toLocaleDateString()}</td>

@@ -3,12 +3,16 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
-// CRASH PROOF PARSER
 const getImgUrl = (data) => {
   let path = data?.packageImages || data?.images || data;
   if (Array.isArray(path)) path = path[0];
+  if (typeof path === 'string' && path.trim().startsWith('{')) {
+    try { path = JSON.parse(path); } catch (e) {}
+  }
   if (path && typeof path === 'object' && path.url) path = path.url;
-  if (!path || typeof path !== "string" || path === "null") return "https://via.placeholder.com/150?text=No+Image";
+  if (!path || typeof path !== "string" || path === "null" || path === "[object Object]") {
+    return "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=150&q=80";
+  }
   return path.startsWith("http") ? path : `https://travelease-backend-mwq0.onrender.com/images/${path}`;
 };
 

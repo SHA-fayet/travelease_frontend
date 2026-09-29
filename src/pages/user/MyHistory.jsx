@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-
-const getImageUrl = (imagePath) => {
-  if (!imagePath || typeof imagePath !== "string" || imagePath === "null") {
-    return "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80";
-  }
-  return imagePath.startsWith("http") ? imagePath : `https://travelease-backend-mwq0.onrender.com/images/${imagePath}`;
-};
+import { getImageUrl } from "../../utils/media";
 
 const MyHistory = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -59,7 +53,7 @@ const MyHistory = () => {
             const packageData = booking?.packageDetails || booking?.packageId || booking?.serviceId || {};
             const isService = booking?.itemType && booking.itemType !== "Package";
             const itemName = isService ? (booking.serviceName || "Standalone Service") : (packageData?.packageName || "Unknown Item");
-            const imageUrl = getImageUrl(packageData?.packageImages?.[0] || packageData?.images?.[0]);
+            const imageUrl = getImageUrl(packageData);
             const isPastOrCancelled = new Date(booking?.date || booking?.travelDate).getTime() < new Date().getTime() || booking?.status === "Cancelled" || booking?.bookingStatus === "Cancelled";
 
             return (

@@ -17,13 +17,19 @@ const defaultSlides = [
 // 2. Crash-Proof Cloudinary Parser
 const getSafeImg = (imgRef) => {
   let path = Array.isArray(imgRef) ? imgRef[0] : imgRef;
+  
+  // Safely parse stringified JSON objects from the database
+  if (typeof path === 'string' && path.trim().startsWith('{')) {
+    try { path = JSON.parse(path); } catch (e) {}
+  }
+  
   if (path && typeof path === 'object' && path.url) path = path.url;
-  if (!path || typeof path !== "string" || path === "null") return null; // Returns null so the fallback image takes over
+  
+  if (!path || typeof path !== "string" || path === "null" || path === "[object Object]") return null;
   return path.startsWith("http") ? path : `https://travelease-backend-mwq0.onrender.com/images/${path}`;
 };
 
 const HeroImage = () => {
-  // Initialize with beautiful defaults so the page is never blank
   const [slides, setSlides] = useState(defaultSlides);
 
   useEffect(() => {
@@ -31,24 +37,36 @@ const HeroImage = () => {
     
     const loadDynamicPackages = async () => {
       try {
-        // Fetch only the 5 latest packages to keep the homepage lightning fast
-        const res = await fetch("/api/package/get-packages?limit=5&sort=createdAt&order=desc");
+        // Fetch up to 15 to ensure we find at least 5 valid ones
+        const res = await fetch("/api/package/get-packages?limit=15&sort=createdAt&order=desc");
         const data = await res.json();
         
         if (data?.success && data?.packages?.length > 0 && !cancelled) {
-          const dynamicSlides = data.packages.map((pkg, index) => {
+          const validSlides = [];
+          
+          // PERFECT FIX: Only keep packages that have a successfully loaded image
+          for (const pkg of data.packages) {
             const cloudinaryUrl = getSafeImg(pkg.packageImages);
-            const fallbackSlide = defaultSlides[index % defaultSlides.length];
+            if (cloudinaryUrl) {
+              validSlides.push({
+                id: pkg._id,
+                title: pkg.packageName,
+                location: (pkg.packageDestination || pkg.placeName || "Bangladesh").toUpperCase(),
+                image: cloudinaryUrl 
+              });
+            }
+            if (validSlides.length >= 5) break;
+          }
 
-            return {
-              id: pkg._id,
-              title: pkg.packageName || fallbackSlide.title,
-              location: (pkg.packageDestination || pkg.placeName || fallbackSlide.location).toUpperCase(),
-              // If Cloudinary succeeds, use it. If it fails, keep the beautiful default image.
-              image: cloudinaryUrl || fallbackSlide.image 
-            };
-          });
-          setSlides(dynamicSlides);
+          // Pad the slider with default slides if we don't have 5 valid dynamic ones
+          const finalSlides = [...validSlides];
+          let i = 0;
+          while (finalSlides.length < 5) {
+            finalSlides.push(defaultSlides[i]);
+            i++;
+          }
+          
+          setSlides(finalSlides);
         }
       } catch (error) { 
         console.error("Dynamic fetch failed, defaulting to stable imagery.", error); 
@@ -73,7 +91,6 @@ const HeroImage = () => {
           <SwiperSlide key={slide.id || index}>
             <div className="relative w-full h-full bg-slate-900 group">
               
-              {/* Image with fallback error handler */}
               <img 
                 src={slide.image} 
                 alt={slide.title} 
@@ -81,7 +98,6 @@ const HeroImage = () => {
                 onError={(e) => { e.currentTarget.src = defaultSlides[index % defaultSlides.length].image; }} 
               />
               
-              {/* Beautiful Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex items-end p-8 md:p-14">
                 <div className="flex flex-col gap-2 max-w-3xl transform transition-all duration-700 translate-y-4 group-hover:translate-y-0">
                   <span className="text-yellow-400 text-xs md:text-sm font-black tracking-[0.2em] uppercase drop-shadow-md">
