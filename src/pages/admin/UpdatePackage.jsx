@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 
-// CRASH PROOF PARSER FOR UPDATE PAGE
 const getImgUrl = (image) => {
   if (image instanceof File) return URL.createObjectURL(image);
   let path = image;
@@ -63,7 +62,13 @@ const UpdatePackage = () => {
       });
       formData.packageImages.forEach((image) => { form.append("packageImages", image); });
 
-      const res = await fetch(`/api/package/update-package/${params?.id}`, { method: "POST", body: form });
+      // FIXED: Added credentials: "include" so auth cookies are sent to backend
+      const res = await fetch(`/api/package/update-package/${params?.id}`, { 
+        method: "POST", 
+        credentials: "include",
+        body: form 
+      });
+
       const data = await res.json();
       if (data?.success === false) setError(data?.message);
       else { toast.success(data?.message || "Package updated successfully!"); navigate(`/package/${params?.id}`); }
