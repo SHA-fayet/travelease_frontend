@@ -1,5 +1,8 @@
 import React from "react";
-const googleMapsKey = import.meta.env.VITE_APP_GOOGLE_MAPS_KEY;
+
+// This checks Vercel first, but falls back directly to your provided API key if Vercel fails
+const googleMapsKey = import.meta.env.VITE_APP_GOOGLE_MAPS_KEY || "AIzaSyB8S4LzI6VKV5P3GWBwqpV5nzzjiOixe7I";
+
 const MapModal = ({ location, onClose }) => {
   const mapSrc = `https://www.google.com/maps/embed/v1/place?key=${googleMapsKey}&q=${encodeURIComponent(
     location
