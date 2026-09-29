@@ -11,14 +11,14 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminRoute from "./pages/Routes/AdminRoute";
 import UpdatePackage from "./pages/admin/UpdatePackage";
 import AddPackages from "./pages/admin/AddPackages";
-import AddHotel from "./pages/admin/AddHotel"; // <-- New
-import AddTransport from "./pages/admin/AddTransport"; // <-- New
-import AddGuide from "./pages/admin/AddGuide"; // <-- New
+import AddHotel from "./pages/admin/AddHotel";
+import AddTransport from "./pages/admin/AddTransport";
+import AddGuide from "./pages/admin/AddGuide";
 import Package from "./pages/Package";
 import RatingsPage from "./pages/RatingsPage";
 import Booking from "./pages/user/Booking";
 import Search from "./pages/Search";
-import AgencyDashboard from "./pages/agency/AgencyDashboard"; 
+import AgencyDashboard from "./pages/agency/AgencyDashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "./pages/components/Footer";
@@ -26,8 +26,9 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import "leaflet/dist/leaflet.css";
 import { FaRobot } from "react-icons/fa";
-import AskAIModal from "./pages/components/AskAIModal"; 
+import AskAIModal from "./pages/components/AskAIModal";
 import Services from "./pages/Services";
+
 const App = () => {
   const [showModal, setShowModal] = useState(false);
 
@@ -43,33 +44,36 @@ const App = () => {
             <Route path="/search" element={<Search />} />
             <Route path="/services" element={<Services />} />
             <Route path="/blog" element={<Blog />} />
-            
+
             <Route path="/contact" element={<Contact />} />
-            
+
             <Route path="/profile" element={<PrivateRoute />}>
               <Route path="user" element={<Profile />} />
             </Route>
-            
+
+            {/* Admin-only routes */}
             <Route path="/profile" element={<AdminRoute />}>
               <Route path="admin" element={<AdminDashboard />} />
+              {/* FIX: this is the URL the "Edit" button in AllPackages links to */}
+              <Route path="admin/update-package/:id" element={<UpdatePackage />} />
             </Route>
-            
+
             {/* Shared Management Routes (Accessible by Admins & Agencies) */}
             <Route path="/admin/add-package" element={<AddPackages />} />
             <Route path="/admin/add-packages" element={<AddPackages />} />
             <Route path="/admin/update-package/:id" element={<UpdatePackage />} />
-            
-            {/* New Standalone Service Routes */}
+
+            {/* Standalone Service Routes */}
             <Route path="/admin/add-hotel" element={<AddHotel />} />
             <Route path="/admin/add-transport" element={<AddTransport />} />
             <Route path="/admin/add-guide" element={<AddGuide />} />
 
             <Route path="/agency-dashboard" element={<AgencyDashboard />} />
-            
+
             <Route path="/about" element={<About />} />
             <Route path="/package/:id" element={<Package />} />
             <Route path="/package/ratings/:id" element={<RatingsPage />} />
-            
+
             <Route path="/booking" element={<PrivateRoute />}>
               <Route path=":packageId" element={<Booking />} />
             </Route>
