@@ -11,10 +11,11 @@ import { useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { getImageUrl } from "../utils/media";
 
-import weatherImg from "../../assets/images/weather.png";
-import plane from "../../assets/images/plane.png";
-import event from "../../assets/images/event.png";
-import setting from "../../assets/images/setting.png";
+// FIXED: Changed from "../../assets" to "../assets" to fix the Vercel Build Crash
+import weatherImg from "../assets/images/weather.png";
+import plane from "../assets/images/plane.png";
+import event from "../assets/images/event.png";
+import setting from "../assets/images/setting.png";
 
 const Services = () => {
   const { currentUser } = useSelector((state) => state.user);
