@@ -4,6 +4,19 @@ import { FaTimes, FaCloudUploadAlt, FaCamera, FaMapMarkerAlt, FaSpinner, FaSuitc
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
+// Safe Image Parser to prevent connection closed crashes
+const getSafeImg = (data) => {
+  let path = Array.isArray(data) ? data[0] : data;
+  if (typeof path === 'string' && path.trim().startsWith('{')) {
+    try { path = JSON.parse(path); } catch (e) {}
+  }
+  if (path && typeof path === 'object' && path.url) path = path.url;
+  if (!path || typeof path !== "string" || path === "null" || path === "[object Object]") {
+    return "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=150&q=80";
+  }
+  return path.startsWith("http") ? path : `https://travelease-backend-mwq0.onrender.com/images/${path}`;
+};
+
 const ImageSearchModal = ({ isOpen, onClose }) => {
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -171,7 +184,7 @@ const ImageSearchModal = ({ isOpen, onClose }) => {
                         className="bg-white border p-3 rounded-xl flex gap-3 hover:shadow-md transition group"
                       >
                         <img 
-                          src={(pkg.packageImages && pkg.packageImages[0] && pkg.packageImages[0].startsWith("http")) ? pkg.packageImages[0] : (pkg.packageImages && pkg.packageImages[0] ? `https://travelease-backend-mwq0.onrender.com/images/${pkg.packageImages[0]}` : "https://via.placeholder.com/150")} 
+                          src={getSafeImg(pkg.packageImages)} 
                           alt={pkg.packageName} 
                           className="w-16 h-16 object-cover rounded-lg" 
                         />
@@ -206,7 +219,7 @@ const ImageSearchModal = ({ isOpen, onClose }) => {
                         className="bg-white border p-3 rounded-xl flex gap-3 hover:shadow-md transition group"
                       >
                         <img 
-                          src={(hotel.images && hotel.images[0] && hotel.images[0].startsWith("http")) ? hotel.images[0] : (hotel.images && hotel.images[0] ? `https://travelease-backend-mwq0.onrender.com/images/${hotel.images[0]}` : "https://via.placeholder.com/150")} 
+                          src={getSafeImg(hotel.images)} 
                           alt={hotel.name} 
                           className="w-16 h-16 object-cover rounded-lg" 
                         />
